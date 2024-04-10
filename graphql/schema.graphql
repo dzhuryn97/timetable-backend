@@ -1,0 +1,97 @@
+#
+scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
+
+"A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
+scalar DateTime @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\DateTime")
+
+"Indicates what fields are available at the top level of a query operation."
+type Query {
+    login(email: String!, password: String!): String!
+    #
+    #    "Find a single user by an identifying attribute."
+    #    user(
+    #      "Search by primary key."
+    #      id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
+    #
+    #      "Search by email address."
+    #      email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
+    #    ): User @find
+    #
+    #    "List multiple users."
+    #    users(
+    #      "Filters by name. Accepts SQL LIKE wildcards `%` and `_`."
+    #      name: String @where(operator: "like")
+    #    ): [User!]! @paginate(defaultCount: 10)
+    #
+    doctor (id: ID @eq): Doctor @find
+
+    paginationDoctors: [Doctor!]! @paginate @orderBy(column: "id", direction: DESC)
+
+    doctors  (
+        name: String @like(template: "%{}%")
+        limit: Int @limit
+    ): [Doctor!]! @all @orderBy(column: "id", direction: ASC)
+
+    daySlots: [DaySlot!]!@all
+}
+
+
+"Account of a person who utilizes this application."
+#type User {
+#    "Unique primary key."
+#    id: ID!
+#
+#    "Non-unique name."
+#    name: String!
+#
+#    "Unique email address."
+#    email: String!
+#
+#    "When the email was verified."
+#    email_verified_at: DateTime
+#
+#    "When the account was created."
+#    created_at: DateTime!
+#
+#    "When the account was last updated."
+#    updated_at: DateTime!
+#}
+type DaySlot {
+    id: ID!
+    date(format: String):String  @dateFormat(default: "d-m-Y")
+    status: StatusEnum!
+    workHours: String
+    absentReason: String
+    replacement: Doctor
+}
+
+input CreateDaySlotHasMany {
+    create: [DaySlotInput!]!
+}
+
+input DaySlotInput {
+    date: DateTime
+    status: StatusEnum!
+}
+
+type Doctor {
+    id: ID!
+    name : String!
+    description(len: Int) : String!
+    photo : String! @url
+    daySlots: [DaySlot!]!
+}
+
+input DoctorInput {
+    name: String!
+    description: String
+    photo : String,
+    daySlots: CreateDaySlotHasMany
+}
+
+type Mutation {
+    upload(file: Upload!): String
+    createDoctor(input: DoctorInput @spread): Doctor! @create
+    deleteDoctor(id: ID! @whereKey): Doctor @delete
+}
+#type Character

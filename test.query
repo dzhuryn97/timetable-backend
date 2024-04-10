@@ -1,0 +1,13 @@
+
+    query SearchForm_Query {
+  ...DoctorList_QueryFragment
+}
+fragment DoctorListItem_DoctorFragment on Doctor {
+  id
+  name
+}
+fragment DoctorList_QueryFragment on Query {
+  doctors {
+    ...DoctorListItem_DoctorFragment
+  }
+}
