@@ -43,6 +43,19 @@ Route::get('/test', function (\Illuminate\Http\Request $request) {
 
 
 Route::get('/set',function (){
+    $month = 1;
+    $year = 2024;
+
+    $date = \Carbon\Carbon::createFromDate($year, $month);
+    dump($date->startOfMonth());
+    dd($date->endOfMonth());
+
+//    $doctor = \App\Models\Doctor::find(2);
+
+
+    dd('end');
+
+    dd($doctor->photo);
     \Session::push('test','hello');
 });
 Route::get('/get',function (){

@@ -5,10 +5,18 @@ enum StatusEnum {
 
 "Indicates what fields are available at the top level of a query operation."
 type Query {
-  login(email: String!, password: String!): String!
-  doctor(id: ID): Doctor
+  login(email: String!, password: String!): AuthToken!
+  user(id: ID): User!
+  doctor(id: ID): Doctor!
   doctors(name: String, limit: Int): [Doctor!]!
   daySlots: [DaySlot!]!
+  users(
+    "Limits number of fetched items."
+    first: Int! = 10
+
+    "The offset from which items are returned."
+    page: Int
+  ): UserPaginator!
   paginationDoctors(
     "Limits number of fetched items."
     first: Int!
@@ -21,7 +29,12 @@ type Query {
 type Mutation {
   upload(file: Upload!): String
   createDoctor(input: DoctorInput): Doctor!
+  updateDoctor(input: DoctorUpdateInput): Doctor!
   deleteDoctor(id: ID!): Doctor
+  updateDaySlots(input: UpdateDaySlotsInput): [DaySlot!]!
+  createUser(input: CreateUserInput): User
+  updateUser(input: UpdateUserInput): User
+  deleteUser(id: ID!): User
 }
 
 scalar Upload
@@ -29,10 +42,32 @@ scalar Upload
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
 scalar DateTime
 
+scalar Date
+
+type AuthToken {
+  name: String!
+  token: String!
+  role: UserRoleEnum!
+}
+
 "Account of a person who utilizes this application."
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  role: String!
+}
+
+type DaySlotTemplate {
+  id: ID!
+  dayNumber: Int!
+  status: StatusEnum!
+  workHours: String
+}
+
 type DaySlot {
   id: ID!
-  date(format: String): String
+  date(format: String): String!
   status: StatusEnum!
   workHours: String
   absentReason: String
@@ -43,9 +78,23 @@ input CreateDaySlotHasMany {
   create: [DaySlotInput!]!
 }
 
+input UpdateReplacementHasMany {
+  connect: ID
+}
+
 input DaySlotInput {
-  date: DateTime
+  id: ID
+  date: Date!
   status: StatusEnum!
+  workHours: String
+  absentReason: String
+  replacement: UpdateReplacementHasMany
+}
+
+input DaySlotTemplateInput {
+  dayNumber: Int
+  status: StatusEnum
+  workHours: String
 }
 
 type Doctor {
@@ -53,14 +102,58 @@ type Doctor {
   name: String!
   description(len: Int): String!
   photo: String!
-  daySlots: [DaySlot!]!
+  currentMonthDaySlots: [DaySlot!]!
+  daySlots(month: Int!, year: Int!): [DaySlot!]!
+  daySlotTemplates: [DaySlotTemplate!]!
 }
 
 input DoctorInput {
-  name: String!
+  name: String
   description: String
   photo: String
   daySlots: CreateDaySlotHasMany
+  daySlotTemplates: [DaySlotTemplateInput!]
+}
+
+input DoctorUpdateInput {
+  id: ID!
+  name: String
+  description: String
+  photo: String
+  daySlots: CreateDaySlotHasMany
+  daySlotTemplates: [DaySlotTemplateInput!]
+}
+
+type Film {
+  id: Int
+  name: String
+}
+
+input UpdateDaySlotsInput {
+  doctorId: ID!
+  month: Int!
+  year: Int!
+  daySlots: [DaySlotInput!]
+}
+
+enum UserRoleEnum {
+  ADMIN
+  COORDINATOR
+}
+
+input CreateUserInput {
+  name: String
+  email: String
+  role: UserRoleEnum
+  password: String
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+  email: String
+  role: UserRoleEnum
+  password: String
 }
 
 "Information about pagination using a fully featured paginator."
@@ -88,6 +181,15 @@ type PaginatorInfo {
 
   "Number of total available items."
   total: Int!
+}
+
+"A paginated list of User items."
+type UserPaginator {
+  "Pagination information about the list of items."
+  paginatorInfo: PaginatorInfo!
+
+  "A list of User items."
+  data: [User!]!
 }
 
 "A paginated list of Doctor items."

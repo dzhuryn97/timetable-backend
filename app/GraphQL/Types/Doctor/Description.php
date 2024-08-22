@@ -2,6 +2,7 @@
 
 namespace App\GraphQL\Types\Doctor;
 
+use App\Exceptions\CustomException;
 use App\Models\Doctor;
 
 final readonly class Description

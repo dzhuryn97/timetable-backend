@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Enums\UserRoleEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -41,6 +42,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @property \Illuminate\Support\Carbon|null $updatedAt
  * @property-read int|null $notificationsCount
  * @property-read int|null $tokensCount
+ * @property string $role
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRole($value)
  * @mixin \Eloquent
  */
 class User extends Authenticatable
@@ -76,5 +79,6 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
+        'role' => UserRoleEnum::class
     ];
 }

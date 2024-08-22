@@ -27,20 +27,38 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereUpdatedAt($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DaySlotTemplate> $daySlotTemplates
+ * @property-read int|null $daySlotTemplatesCount
  * @mixin \Eloquent
  */
 class Doctor extends Model
 {
     use HasFactory;
 
-    public function daySlots(): HasMany
+    /**
+     * @param DaySlotTemplate[] $daySlots
+     */
+    public function setUpdateDaySlotTemplates(array $daySlots): void
     {
-        return $this->hasMany(DaySlot::class)->orderBy('date','asc');
+dd('mtod');
     }
 
+
+    public function daySlots(): HasMany
+    {
+        return $this->hasMany(DaySlot::class)->orderBy('date', 'asc');
+    }
+
+    public function daySlotTemplates(): HasMany
+    {
+        return $this->hasMany(DaySlotTemplate::class);
+    }
+
+
     // this is a recommended way to declare event handlers
-    protected static function booted () {
-        static::deleting(function(Doctor $doctor) { // before delete() method call this
+    protected static function booted()
+    {
+        static::deleting(function (Doctor $doctor) { // before delete() method call this
             $doctor->daySlots()->delete();
 
 
@@ -50,6 +68,7 @@ class Doctor extends Model
                 $daySlot->replacement()->disassociate();
                 $daySlot->save();
             }
+
 
         });
     }

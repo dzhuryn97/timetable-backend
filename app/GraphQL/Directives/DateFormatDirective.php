@@ -36,11 +36,10 @@ GRAPHQL;
             // Call the resolver, passing along the resolver arguments
 
 
-            $format = $args['format'] ??'d-m-Y';
+            $format = $args['format'] ??'Y-m-d';
             $result = $resolver($root, $args, $context, $info);
 
             $res =  $result->format($format);
-
 
 
 

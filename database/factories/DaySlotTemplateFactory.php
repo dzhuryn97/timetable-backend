@@ -4,17 +4,22 @@ namespace Database\Factories;
 
 use App\Models\Doctor;
 use App\Models\Enums\StatusEnum;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class DaySlotFactory extends Factory
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\DaySlotTemplate>
+ */
+class DaySlotTemplateFactory extends Factory
 {
-
-    public function definition()
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition(): array
     {
-
         $data = [
-            'date' => \Carbon\Carbon::createFromTimeStamp(fake()->dateTimeBetween('now', '+7 days')->getTimestamp()),
+            'dayNumber' => fake()->numberBetween(1, 7),
         ];
 
         switch (fake()->randomElement(StatusEnum::cases())) {
@@ -28,8 +33,6 @@ class DaySlotFactory extends Factory
 
                 $extra = [
                     'status' => StatusEnum::ABSENT,
-                    'absentReason' => fake()->randomElement(['Відпустка', 'Лікарняний']),
-                    'replacementId' => Doctor::factory()->create()
                 ];
 
                 break;

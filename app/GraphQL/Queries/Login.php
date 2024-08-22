@@ -3,6 +3,7 @@
 namespace App\GraphQL\Queries;
 
 use App\Exceptions\CustomException;
+use App\Models\AuthToken;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 
@@ -22,7 +23,11 @@ final readonly class Login
             );
         }
 
-        return $user->createToken("default")->plainTextToken;
+        return new AuthToken(
+            $user->createToken("default")->plainTextToken,
+            $user->name,
+            $user->role,
+        );
         // TODO implement the resolver
     }
 }
