@@ -1,0 +1,27 @@
+name: Deploy to dev env
+on:
+  push:
+env:
+  PROJECT_FOLDER: /var/www/timetable/backend
+  TEST_TAG: dzhuryn/timetable-backend-php:test
+jobs:
+  test:
+    name: Code lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup build
+        uses: ./.github/actions/setup-build
+        with:
+          docker-user: ${{ secrets.DOCKER_USER }}
+          docker-password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build and export to Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: docker/php/Dockerfile
+          load: true
+          tags: ${{ env.TEST_TAG }}
+      - name: Check code style
+        run: |
+          docker run --rm ${{ env.TEST_TAG }} composer run cs-check
