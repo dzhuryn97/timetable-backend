@@ -1,9 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Validators;
 
-use Nuwave\Lighthouse\Validation\Validator;
 use Illuminate\Validation\Rule;
+use Nuwave\Lighthouse\Validation\Validator;
 
 final class UpdateUserInputValidator extends Validator
 {

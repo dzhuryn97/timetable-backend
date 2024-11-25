@@ -10,7 +10,6 @@ class AuthToken
         public string $token,
         public string $name,
         public UserRoleEnum $role,
-    )
-    {
+    ) {
     }
 }

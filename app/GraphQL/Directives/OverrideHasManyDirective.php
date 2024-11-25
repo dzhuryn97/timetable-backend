@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Directives;
 
@@ -13,19 +15,17 @@ use Nuwave\Lighthouse\Support\Contracts\ArgResolver;
 
 final class OverrideHasManyDirective extends BaseDirective implements ArgDirective, ArgResolver
 {
-    // TODO implement the directive https://lighthouse-php.com/master/custom-directives/getting-started.html
-
     public static function definition(): string
     {
-        return /** @lang GraphQL */ <<<'GRAPHQL'
-directive @overrideHasMany on INPUT_FIELD_DEFINITION
-GRAPHQL;
+        return
+            /** @lang GraphQL */
+            <<<'GRAPHQL'
+                directive @overrideHasMany on INPUT_FIELD_DEFINITION
+            GRAPHQL;
     }
 
     /**
-     * @param mixed $root The result of the parent resolver.
-     * @param mixed|\Nuwave\Lighthouse\Execution\Arguments\ArgumentSet|array<\Nuwave\Lighthouse\Execution\Arguments\ArgumentSet> $value The slice of arguments that belongs to this nested resolver.
-     *
+     * @param  mixed  $root  The result of the parent resolver.
      * @return mixed|void|null May return the modified $root
      */
     public function __invoke($parent, $argsList): mixed
@@ -47,11 +47,10 @@ GRAPHQL;
 
         /** @var Model $relationModel */
         foreach ($parent->{$relationName} as $relationModel) {
-            if (!in_array($relationModel->getKey(), $persistedKeys)) {
+            if (in_array($relationModel->getKey(), $persistedKeys)) {
                 $relationModel->delete();
             }
         }
-
 
         return null;
     }

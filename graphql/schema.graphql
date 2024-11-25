@@ -9,17 +9,7 @@ scalar Date @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Date")
 "Indicates what fields are available at the top level of a query operation."
 type Query {
     login(email: String!, password: String!): AuthToken!
-    #
-    #    "Find a single user by an identifying attribute."
-    #    user(
-    #      "Search by primary key."
-    #      id: ID @eq @rules(apply: ["prohibits:email", "required_without:email"])
-    #
-    #      "Search by email address."
-    #      email: String @eq @rules(apply: ["prohibits:id", "required_without:id", "email"])
-    #    ): User @find
-    #
-    #    "List multiple users."
+
     users: [User!]! @paginate(defaultCount: 10)
 
     user(id: ID @eq): User! @find
@@ -42,7 +32,6 @@ type AuthToken {
     role: UserRoleEnum!
 }
 
-"Account of a person who utilizes this application."
 type User {
     id: ID!
     name: String!
@@ -87,8 +76,6 @@ input DaySlotTemplateInput {
     workHours: String
 }
 
-
-
 type Doctor {
     id: ID!
     name : String!
@@ -99,8 +86,6 @@ type Doctor {
     daySlotTemplates: [DaySlotTemplate!]!
 }
 
-
-
 input DoctorInput {
     name: String
     description: String
@@ -108,7 +93,6 @@ input DoctorInput {
     daySlots: CreateDaySlotHasMany
     daySlotTemplates: [DaySlotTemplateInput!] @overrideHasMany
 }
-
 
 input DoctorUpdateInput {
     id: ID!
@@ -119,10 +103,6 @@ input DoctorUpdateInput {
     daySlotTemplates: [DaySlotTemplateInput!] @overrideHasMany
 }
 
-type Film {
-    id: Int
-    name: String
-}
 input UpdateDaySlotsInput {
     doctorId: ID!
     month: Int!

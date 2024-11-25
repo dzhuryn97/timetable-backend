@@ -1,8 +1,9 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Types\Doctor;
 
-use App\Exceptions\CustomException;
 use App\Models\Doctor;
 
 final readonly class Description
@@ -11,9 +12,10 @@ final readonly class Description
     public function __invoke(Doctor $_, array $args)
     {
         $data = $_->description;
-        if(isset($args['len'])){
-            $data = substr($data,0,$args['len']);
+        if (isset($args['len'])) {
+            $data = substr($data, 0, $args['len']);
         }
-       return $data;
+
+        return $data;
     }
 }

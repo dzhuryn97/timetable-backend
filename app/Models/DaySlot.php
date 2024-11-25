@@ -21,6 +21,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property \Illuminate\Support\Carbon|null $createdAt
  * @property \Illuminate\Support\Carbon|null $updatedAt
  * @property-read \App\Models\Doctor|null $replacement
+ *
  * @method static \Database\Factories\DaySlotFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|DaySlot newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|DaySlot newQuery()
@@ -34,20 +35,20 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|DaySlot whereStatus($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DaySlot whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|DaySlot whereWorkHours($value)
+ *
  * @mixin \Eloquent
  */
 class DaySlot extends Model
 {
-    use HasFactory, HasCamelCasing;
-
+    use HasCamelCasing;
+    use HasFactory;
 
     protected $casts = [
         'status' => StatusEnum::class,
-        'date' => 'datetime:Y-m-d'
+        'date' => 'datetime:Y-m-d',
     ];
 
-
-    public function replacement():BelongsTo
+    public function replacement(): BelongsTo
     {
         return $this->belongsTo(Doctor::class);
     }

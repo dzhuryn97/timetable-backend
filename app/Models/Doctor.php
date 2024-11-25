@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property \Illuminate\Support\Carbon|null $updatedAt
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DaySlot> $daySlots
  * @property-read int|null $daySlotsCount
+ *
  * @method static \Database\Factories\DoctorFactory factory($count = null, $state = [])
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor newQuery()
@@ -27,26 +28,21 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereName($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor wherePhoto($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Doctor whereUpdatedAt($value)
+ *
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\DaySlotTemplate> $daySlotTemplates
  * @property-read int|null $daySlotTemplatesCount
+ *
  * @mixin \Eloquent
  */
 class Doctor extends Model
 {
     use HasFactory;
 
-    /**
-     * @param DaySlotTemplate[] $daySlots
-     */
-    public function setUpdateDaySlotTemplates(array $daySlots): void
-    {
-dd('mtod');
-    }
 
 
     public function daySlots(): HasMany
     {
-        return $this->hasMany(DaySlot::class)->orderBy('date', 'asc');
+        return $this->hasMany(DaySlot::class)->orderBy('date');
     }
 
     public function daySlotTemplates(): HasMany
@@ -54,23 +50,20 @@ dd('mtod');
         return $this->hasMany(DaySlotTemplate::class);
     }
 
-
-    // this is a recommended way to declare event handlers
     protected static function booted()
     {
-        static::deleting(function (Doctor $doctor) { // before delete() method call this
-            $doctor->daySlots()->delete();
-
-
-            $daySlots = DaySlot::whereReplacementId($doctor->id)->get();
-
-            foreach ($daySlots as $daySlot) {
-                $daySlot->replacement()->disassociate();
-                $daySlot->save();
-            }
-
-
+        static::deleting(function (Doctor $doctor) {
+            self::deleteReferences($doctor);
         });
     }
 
+    private static function deleteReferences(Doctor $doctor): void
+    {
+        $doctor->daySlots()->delete();
+        $daySlots = DaySlot::whereReplacementId($doctor->id)->get();
+        foreach ($daySlots as $daySlot) {
+            $daySlot->replacement()->disassociate();
+            $daySlot->save();
+        }
+    }
 }

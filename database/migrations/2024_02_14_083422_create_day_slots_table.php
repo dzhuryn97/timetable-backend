@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class () extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,9 +14,9 @@ return new class extends Migration
             $table->id();
             $table->date('date');
             $table->foreignId('doctor_id')->unsigned();
-            $table->string('status',20);
-            $table->string('work_hours',255)->nullable();
-            $table->string('absent_reason',255)->nullable();
+            $table->string('status', 20);
+            $table->string('work_hours', 255)->nullable();
+            $table->string('absent_reason', 255)->nullable();
             $table->foreignId('replacement_id')->unsigned()->nullable();
             $table->timestamps();
 

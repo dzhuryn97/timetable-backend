@@ -1,24 +1,24 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Directives;
 
 use Nuwave\Lighthouse\Execution\ResolveInfo;
 use Nuwave\Lighthouse\Schema\Directives\BaseDirective;
 use Nuwave\Lighthouse\Schema\Values\FieldValue;
-use Nuwave\Lighthouse\Support\Contracts\ArgDirective;
-use Nuwave\Lighthouse\Support\Contracts\ArgTransformerDirective;
 use Nuwave\Lighthouse\Support\Contracts\FieldMiddleware;
 use Nuwave\Lighthouse\Support\Contracts\GraphQLContext;
 
 final class UrlDirective extends BaseDirective implements FieldMiddleware
 {
-    // TODO implement the directive https://lighthouse-php.com/master/custom-directives/getting-started.html
-
     public static function definition(): string
     {
-        return /** @lang GraphQL */ <<<'GRAPHQL'
-directive @url on FIELD_DEFINITION
-GRAPHQL;
+        return
+            /** @lang GraphQL */
+            <<<'GRAPHQL'
+                directive @url on FIELD_DEFINITION
+            GRAPHQL;
     }
 
     public function handleField(FieldValue $fieldValue): void
@@ -31,5 +31,4 @@ GRAPHQL;
             return \URL::to(\Storage::url($result));
         });
     }
-
 }

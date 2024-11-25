@@ -1,33 +1,35 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Queries;
 
-use App\Exceptions\CustomException;
 use App\Models\AuthToken;
 use App\Models\User;
 use Illuminate\Auth\AuthenticationException;
 
 final readonly class Login
 {
+    private const  GUARD = 'json_login';
+
     /** @param  array{}  $args */
-    public function __invoke( $_, array $args)
+    public function __invoke($_, array $args)
     {
 
-        $guard = 'json_login';
         /** @var User $user */
-        $user = \Auth::guard($guard)->loginViaCredentials($args);
+        $user = \Auth::guard(self::GUARD)->loginViaCredentials($args);
 
-        if(!$user){
+        if (! $user) {
             throw new AuthenticationException(
-                'Unauthenticated.', [$guard]
+                'Unauthenticated.',
+                [self::GUARD]
             );
         }
 
         return new AuthToken(
-            $user->createToken("default")->plainTextToken,
+            $user->createToken('default')->plainTextToken,
             $user->name,
             $user->role,
         );
-        // TODO implement the resolver
     }
 }

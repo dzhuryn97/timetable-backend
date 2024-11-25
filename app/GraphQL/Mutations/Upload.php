@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 
 namespace App\GraphQL\Mutations;
 
@@ -13,6 +15,7 @@ final readonly class Upload
         $file = $args['file'];
 
         $res = $file->store('uploads');
+
         return $res;
     }
 }
