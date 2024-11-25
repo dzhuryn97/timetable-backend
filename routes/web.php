@@ -17,6 +17,10 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
     return redirect('/graphiql');
 });
 
+Route::get('/version', function (\Illuminate\Http\Request $request) {
+    return '0.9';
+});
+
 Route::get('/login', [\App\Http\Controllers\AuthController::class,'showLoginForm'])
     ->name('login');
 Route::post('/login', [\App\Http\Controllers\AuthController::class,'loginProcess'])->name('loginProcess');
