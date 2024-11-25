@@ -13,9 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/user', function (\Illuminate\Http\Request $request) {
-    dump($request->user()->toArray());
-})->middleware(['auth:web']);
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    return redirect('/graphiql');
+});
 
 Route::get('/login', [\App\Http\Controllers\AuthController::class,'showLoginForm'])
     ->name('login');

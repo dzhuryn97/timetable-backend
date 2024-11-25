@@ -1,4 +1,3 @@
-#
 scalar Upload @scalar(class: "Nuwave\\Lighthouse\\Schema\\Types\\Scalars\\Upload")
 
 "A datetime string with format `Y-m-d H:i:s`, e.g. `2018-05-23 13:43:32`."
@@ -137,5 +136,3 @@ type Mutation {
     updateUser(input: UpdateUserInput @spread): User @update
     deleteUser(id: ID! @whereKey): User @delete
 }
-
-#type Character
