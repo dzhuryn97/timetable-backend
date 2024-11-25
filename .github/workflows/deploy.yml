@@ -50,8 +50,6 @@ jobs:
           push: true
           file: docker/nginx/Dockerfile
           tags: dzhuryn/timetable-backend-webserver:dev
-          target: deployment
-          build-args: PHP_CONTAINER=dzhuryn/timetable-backend-php:dev
   deploy:
     needs: build
     runs-on: ubuntu-latest

@@ -3,7 +3,7 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
-        image: dzhuryn/timetable-backend-php:dev
+#        image: dzhuryn/timetable-backend-php:dev
         depends_on:
             -   mysql
             - redis
@@ -11,7 +11,7 @@ services:
         build:
             context: .
             dockerfile: docker/nginx/Dockerfile
-        image: dzhuryn/timetable-backend-nginx:dev
+#        image: dzhuryn/timetable-backend-nginx:dev
         depends_on:
             -   php
     mysql:
