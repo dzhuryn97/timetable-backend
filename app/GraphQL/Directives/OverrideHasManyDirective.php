@@ -47,7 +47,7 @@ final class OverrideHasManyDirective extends BaseDirective implements ArgDirecti
 
         /** @var Model $relationModel */
         foreach ($parent->{$relationName} as $relationModel) {
-            if (in_array($relationModel->getKey(), $persistedKeys)) {
+            if (!in_array($relationModel->getKey(), $persistedKeys)) {
                 $relationModel->delete();
             }
         }
