@@ -60,7 +60,7 @@ final class UpdateDaySlotsDirective extends BaseDirective implements FieldResolv
                 ->get();
 
             foreach ($updatedMonthDaySlots as $updatedMonthDaySlot) {
-                if (in_array($updatedMonthDaySlot->id, $persistedIds)) {
+                if (!in_array($updatedMonthDaySlot->id, $persistedIds)) {
                     $updatedMonthDaySlot->delete();
                 }
             }
