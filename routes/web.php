@@ -18,7 +18,7 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 });
 
 Route::get('/version', function (\Illuminate\Http\Request $request) {
-    return '1.0';
+    return '1.1';
 });
 
 Route::get('/login', [\App\Http\Controllers\AuthController::class,'showLoginForm'])
