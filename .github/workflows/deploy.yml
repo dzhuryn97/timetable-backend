@@ -65,4 +65,4 @@ jobs:
             cd ${{ env.PROJECT_FOLDER }}
             docker-compose pull
             docker-compose up -d
-            docker-compose exec php php artisan migrate
+            docker-compose exec php php artisan migrate --force
